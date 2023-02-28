@@ -1,10 +1,7 @@
-trigger OpportunityTrigger on Opportunity (before insert, before update) {
-    
+trigger OpportunityTrigger on Opportunity (before insert) {
     OpportunityHelper helper = new OpportunityHelper();
     
-    if (trigger.isBefore && trigger.isInsert) {
-        helper.assignOpportunityImportance(trigger.new);
-    } else if (trigger.isBefore && trigger.isUpdate) {
-        helper.assignOpportunityImportance(trigger.new);
+    if (trigger.isBefore && trigger.isInsert){
+        helper.insertOpportunitiesPriorities(trigger.new);
     }
 }

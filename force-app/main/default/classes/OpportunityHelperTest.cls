@@ -3,47 +3,79 @@ private class OpportunityHelperTest {
 
     @TestSetup
     static void makeData(){
-        Date d = Date.newInstance(2023, 1, 1);
-        Opportunity opp = new Opportunity(Name='TestOpp', StageName='Closed Won', CloseDate=d);
-        insert opp;
-    }
-
-    @isTest
-    static void testInsertInTrigger(){
-        Date d = Date.newInstance(2023, 1, 1);
-        Opportunity opp = new Opportunity(Name='TestOpp', StageName='Closed Won', CloseDate=d);
-        insert opp;
-        System.assertEquals(2, [ SELECT Amount FROM Opportunity ].size());
+        insert DataFactory.createAccounts(4);
     }
 
     @isTest
     static void testGreenOpportunityUpdate(){
-        Oportunity_Revenue_Range__mdt range = Oportunity_Revenue_Range__mdt.getInstance('Green');
-        Opportunity opp = [ SELECT Amount FROM Opportunity ];
-        opp.Amount = range.Lower_Limit__c + 1;
-        update opp;
-        opp = [ SELECT Amount, Priority__c FROM Opportunity ];
-        System.assertEquals('Green', opp.Priority__c);
+		Oportunity_Revenue_Range__mdt range = Oportunity_Revenue_Range__mdt.getInstance('Green');
+        
+        Account acct = [
+            SELECT Id, AnnualRevenue 
+            FROM Account
+			WHERE AnnualRevenue >= :range.Lower_Limit__c
+        ];
+           
+        Opportunity opp = DataFactory.createOpportunities(1, new Account[]{acct})[0];
+		insert opp;
+        
+        Opportunity insertedOpp = [SELECT Priority__c FROM Opportunity WHERE Id=:opp.Id];
+        
+        System.assertEquals('Green', insertedOpp.Priority__c);
     }
 
     @isTest
     static void testYellowOpportunityUpdate(){
         Oportunity_Revenue_Range__mdt range = Oportunity_Revenue_Range__mdt.getInstance('Yellow');
-        Opportunity opp = [ SELECT Amount FROM Opportunity ];
-        opp.Amount = range.Lower_Limit__c + 1;
-        update opp;
-        opp = [ SELECT Amount, Priority__c FROM Opportunity ];
-        System.assertEquals('Yellow', opp.Priority__c);
+        
+        Account acct = [
+            SELECT Id, AnnualRevenue 
+            FROM Account
+			WHERE AnnualRevenue <= :range.Upper_Limit__c AND AnnualRevenue >= :range.Lower_Limit__c 
+        ];
+           
+        Opportunity opp = DataFactory.createOpportunities(1, new Account[]{acct})[0];
+		insert opp;
+        
+        Opportunity insertedOpp = [SELECT Priority__c FROM Opportunity WHERE Id=:opp.Id];
+        
+        System.assertEquals('Yellow', insertedOpp.Priority__c);
     }
 
     @isTest
     static void testRedOpportunityUpdate(){
         Oportunity_Revenue_Range__mdt range = Oportunity_Revenue_Range__mdt.getInstance('Red');
-        Opportunity opp = [ SELECT Amount FROM Opportunity ];
-        opp.Amount = range.Lower_Limit__c + 1;
-        update opp;
-        opp = [ SELECT Amount, Priority__c FROM Opportunity ];
-        System.assertEquals('Red', opp.Priority__c);
+        
+        Account acct = [
+            SELECT Id, AnnualRevenue 
+            FROM Account
+			WHERE AnnualRevenue <= :range.Upper_Limit__c AND AnnualRevenue >= :range.Lower_Limit__c 
+        ];
+           
+        Opportunity opp = DataFactory.createOpportunities(1, new Account[]{acct})[0];
+		insert opp;
+        
+        Opportunity insertedOpp = [SELECT Priority__c FROM Opportunity WHERE Id=:opp.Id];
+        
+        System.assertEquals('Red', insertedOpp.Priority__c);
+    }
+    
+    @isTest
+    static void testOrangeOpportunityUpdate(){
+        Oportunity_Revenue_Range__mdt range = Oportunity_Revenue_Range__mdt.getInstance('Orange');
+        
+        Account acct = [
+            SELECT Id, AnnualRevenue 
+            FROM Account
+			WHERE AnnualRevenue = null
+        ];
+           
+        Opportunity opp = DataFactory.createOpportunities(1, new Account[]{acct})[0];
+		insert opp;
+        
+        Opportunity insertedOpp = [SELECT Priority__c FROM Opportunity WHERE Id=:opp.Id];
+        
+        System.assertEquals('Orange', insertedOpp.Priority__c);
     }
 
 }
