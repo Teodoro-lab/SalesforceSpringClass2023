@@ -4,10 +4,10 @@
     <externalId>false</externalId>
     <formula>CASE(
       Priority__c, 
-      &apos;Green&apos;, IMAGE(&quot;https://connect-customization-5440-dev-ed--c.scratch.vf.force.com/resource/1677461162000/GreenFlag&quot;, &quot;Green flag&quot;, 50, 50),
-     &apos;Yellow&apos;, IMAGE(&quot;https://connect-customization-5440-dev-ed--c.scratch.vf.force.com/resource/1677461162000/YellowFlag&quot;, &quot;Yellow flag&quot;, 50, 50),
-     &apos;Red&apos;, IMAGE(&quot;https://connect-customization-5440-dev-ed--c.scratch.vf.force.com/resource/1677461162000/RedFlag&quot;, &quot;Red flag&quot;, 50, 50),
-     &apos;Orange&apos;, IMAGE(&quot;https://connect-customization-5440-dev-ed--c.scratch.vf.force.com/resource/1677461162000/OrangeFlag&quot;, &quot;Orange flag&quot;, 50, 50),&apos;&apos;
+     &apos;Green&apos;, IMAGE(&quot;/resource/GreenFlag&quot;, &quot;Green flag&quot;, 50, 50),
+     &apos;Yellow&apos;, IMAGE(&quot;/resource/YellowFlag&quot;, &quot;Yellow flag&quot;, 50, 50),
+     &apos;Red&apos;, IMAGE(&quot;/resource/RedFlag&quot;, &quot;Red flag&quot;, 50, 50),
+     &apos;Orange&apos;, IMAGE(&quot;/resource/OrangeFlag&quot;, &quot;Orange flag&quot;, 50, 50),&apos;&apos;
 )</formula>
     <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
     <label>ImportanceColor</label>
